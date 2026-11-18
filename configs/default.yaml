@@ -1,0 +1,22 @@
+# Default injection + analysis settings (all values map to gwhht.config.Config)
+approximant: IMRPhenomD
+m1: 9.0
+m2: 8.0
+s1z: 0.0
+s2z: 0.0
+distance: 200.0        # Mpc
+iota: 0.7853981633974483   # pi/4
+phic: 1.0471975511965976   # pi/3
+ra: 1.2566370614359172     # pi/2.5
+dec: -0.5235987755982988   # -pi/6
+psi: 0.0
+ifos: [L1, H1, V1]
+fsamp: 2048
+flow: 10.0
+fhigh: 1024.0
+t_start: 1367469555.0      # 7 May 2023, 04:38:57 UTC
+seed: 0
+fband: [15.0, 250.0]
+window: [-10.0, 2.0]          # data segment around t_c (s)
+merger_search: [-10.0, 0.5]   # merger-time search range (s)
+xcorr_interval: [-3.5, 1.5]   # cross-correlation segment (s)

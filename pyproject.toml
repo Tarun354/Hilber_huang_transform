@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gwhht"
+version = "0.1.0"
+description = "Hilbert-Huang transform and cross-correlation time-lag estimation for simulated CBC gravitational-wave signals"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Tarun Kumar" }]
+dependencies = ["numpy", "scipy", "matplotlib", "emd", "pyyaml"]
+
+[project.optional-dependencies]
+pycbc = ["pycbc"]            # needed for simulation (conda-forge install recommended)
+dev = ["pytest", "jupyter", "nbconvert", "ipykernel"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
