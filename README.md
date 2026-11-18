@@ -6,35 +6,6 @@ time lags** and **merger time** by cross-correlation. A Monte-Carlo benchmark qu
 
 ![Cross-correlation vs time lag](results/figures/xcorr_time_lag.png)
 
-## Results (30 noise realisations per distance, 9 + 8 M☉ BBH, L1/H1/V1)
-
-Median errors. *Lag error* = |lag - lag of the noise-free signal|, averaged over the 3 detector pairs.
-*Merger error* = |t<sub>peak</sub> - t<sub>c</sub>|.
-
-| distance (Mpc) | network SNR | lag err, whitened data (ms) | lag err, IMF1 (ms) | merger err, data peak (ms) | merger err, IMF1 peak (ms) |
-|---:|---:|---:|---:|---:|---:|
-| 200 | 56 | 0.16 | 0.33 | 7.6 | 7.6 |
-| 300 | 38 | 0.41 | 3.2 | 41 | 21 |
-| 400 | 28 | 1.4 | 9.0 | 171 | 37 |
-| 500 | 23 | 4.0 | 9.8 | 406 | 69 |
-| 600 | 19 | 7.5 | 10.4 | 1200 | 84 |
-| 800 | 14 | 11.6 | 10.9 | 3201 | 1468 |
-| 1200 | 10 | 12.5 | 10.3 | 3687 | 3512 |
-
-<p align="center">
-  <img src="results/figures/lag_error_vs_snr.png" alt="Time-lag error vs SNR" width="48%">
-  <img src="results/figures/merger_error_vs_snr.png" alt="Merger-time error vs SNR" width="48%">
-</p>
-
-**What this shows**
-
-- *Time lag:* plain cross-correlation of the whitened data is more accurate than cross-correlating IMF1 at every SNR above ~15.
-  Below that, both are at chance level (errors of 10-12 ms, comparable to the width of the allowed light-travel-time windows).
-- *Merger time:* taking the peak of IMF1 instead of the raw whitened data reduces the error by a factor ~5-15 at SNR 20-40.
-  A plausible explanation is that IMF1 acts like a high-pass filter that suppresses low-frequency noise
-  (not tested here). Both estimators fail below SNR ~15.
-- Both estimators are deliberately simple (a single peak / correlation maximum); they are baselines, not optimal estimators.
-
 ## Background: from the Hilbert transform to the Hilbert-Huang transform
 
 ### 1. Hilbert transform and the analytic signal
@@ -75,9 +46,6 @@ f(t) = \frac{1}{2\pi}\,\frac{d\theta(t)}{dt}
 
 In this repo the plain Hilbert transform is `gwhht.hht.analytic_signal()`, which uses `scipy.signal.hilbert`.
 
-**Limitation:** the instantaneous frequency is only meaningful for a *mono-component* signal (one frequency at a time).
-Whitened detector data contain noise plus the chirp, so applying the Hilbert transform directly gives a noisy, hard-to-read IF
-(see notebook `02_emd_hht_single_detector.ipynb`).
 
 ### 2. Empirical mode decomposition (EMD)
 
@@ -110,8 +78,34 @@ At each time $t$, every IMF puts its amplitude $A_i(t)$ at its own instantaneous
 spectrum shows a bright track whose frequency rises with time (the chirp). In this repo: `gwhht.hht.hht_spectrum()`
 (instantaneous quantities come from the `emd` package, using its normalised Hilbert transform by default).
 
-**Compared with a spectrogram:** the HHS has no fixed time window, so it does not trade time resolution against frequency
-resolution. Its weakness is that the result depends on how cleanly EMD separates the components; in strong noise, modes can mix.
+## Results (30 noise realisations per distance, 9 + 8 M☉ BBH, L1/H1/V1)
+
+Median errors. *Lag error* = |lag - lag of the noise-free signal|, averaged over the 3 detector pairs.
+*Merger error* = |t<sub>peak</sub> - t<sub>c</sub>|.
+
+| distance (Mpc) | network SNR | lag err, whitened data (ms) | lag err, IMF1 (ms) | merger err, data peak (ms) | merger err, IMF1 peak (ms) |
+|---:|---:|---:|---:|---:|---:|
+| 200 | 56 | 0.16 | 0.33 | 7.6 | 7.6 |
+| 300 | 38 | 0.41 | 3.2 | 41 | 21 |
+| 400 | 28 | 1.4 | 9.0 | 171 | 37 |
+| 500 | 23 | 4.0 | 9.8 | 406 | 69 |
+| 600 | 19 | 7.5 | 10.4 | 1200 | 84 |
+| 800 | 14 | 11.6 | 10.9 | 3201 | 1468 |
+| 1200 | 10 | 12.5 | 10.3 | 3687 | 3512 |
+
+<p align="center">
+  <img src="results/figures/lag_error_vs_snr.png" alt="Time-lag error vs SNR" width="48%">
+  <img src="results/figures/merger_error_vs_snr.png" alt="Merger-time error vs SNR" width="48%">
+</p>
+
+**What this shows**
+
+- *Time lag:* plain cross-correlation of the whitened data is more accurate than cross-correlating IMF1 at every SNR above ~15.
+  Below that, both are at chance level (errors of 10-12 ms, comparable to the width of the allowed light-travel-time windows).
+- *Merger time:* taking the peak of IMF1 instead of the raw whitened data reduces the error by a factor ~5-15 at SNR 20-40.
+  A plausible explanation is that IMF1 acts like a high-pass filter that suppresses low-frequency noise
+  (not tested here). Both estimators fail below SNR ~15.
+- Both estimators are deliberately simple (a single peak / correlation maximum); they are baselines, not optimal estimators.
 
 ## Repository layout
 
