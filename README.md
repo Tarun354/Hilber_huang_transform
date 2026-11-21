@@ -206,13 +206,3 @@ from gwhht.pipeline import run_single
 res = run_single(load_config("configs/default.yaml"), seed=1, distance=300)
 print(res.metrics["snr_network"], res.metrics["lag_imf1_L1H1"])
 ```
-
-## Limitations / next steps
-
-- Simulated stationary Gaussian noise with design-sensitivity PSDs; no glitches or real detector noise.
-- One binary, one sky position, one polarisation; results will vary with sky location (lag geometry) and masses.
-- Natural extensions: real strain from GWOSC (e.g. GW150914), sub-sample lag interpolation, comparison with matched-filter
-  arrival-time estimates, ensemble EMD (EEMD/CEEMDAN) to reduce mode mixing, and spin/higher-mode waveforms.
-
-## Author
-Tarun Kumar
